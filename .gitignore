@@ -1,0 +1,23 @@
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# Python/venv
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Data (keep only curated samples or small extracts)
+data/raw/
+data/curated/*.parquet
+data/curated/*.csv
+!data/curated/.gitkeep
+
+# Power BI auto caches
+*.pbix.autosave
+
+# IDE
+.vscode/
+.idea/
+
