@@ -1,5 +1,6 @@
+streamlit
 pandas
-pyarrow
 requests
-tqdm
 python-dateutil
+pyarrow
+openpyxl
