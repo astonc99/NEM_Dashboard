@@ -2,22 +2,28 @@
 .DS_Store
 Thumbs.db
 
-# Python/venv
+# Python
 __pycache__/
 *.pyc
 .venv/
 venv/
 
-# Data (keep only curated samples or small extracts)
+# Generated data — download via ETL, don't version-control
 data/raw/
+data/curated/prices/
+data/curated/scada/
 data/curated/*.parquet
 data/curated/*.csv
 !data/curated/.gitkeep
 
-# Power BI auto caches
+# Frontend build output and dependencies
+frontend/node_modules/
+frontend/dist/
+
+# Power BI
 *.pbix.autosave
 
 # IDE
 .vscode/
 .idea/
-
+claude.md

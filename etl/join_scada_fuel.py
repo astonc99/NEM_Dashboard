@@ -3,7 +3,7 @@ import pandas as pd
 import os
 
 data_dir = Path(os.path.join(os.path.dirname(__file__), "..", "data"))
-from util_mapping import load_duid_fuel_mapping
+from etl.util_mapping import load_duid_fuel_mapping
 CURATED_SCADA = data_dir / "curated" / "scada"
 
 def load_all_scada() -> pd.DataFrame:
