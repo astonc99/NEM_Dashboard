@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom'
+import { useSyncStatus } from '../context/SyncContext'
 
 const NAV = [
   {
@@ -40,6 +41,7 @@ const NAV = [
 ]
 
 export default function Sidebar() {
+  const { status } = useSyncStatus()
   return (
     <aside className="w-52 flex-shrink-0 flex flex-col bg-slate-900 border-r border-slate-800">
       <div className="px-4 py-5 border-b border-slate-800">
@@ -77,7 +79,22 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      <div className="px-4 py-4 border-t border-slate-800">
+      <div className="px-4 py-4 border-t border-slate-800 space-y-1.5">
+        {status === 'running' && (
+          <div className="flex items-center gap-1.5">
+            <svg className="w-3 h-3 animate-spin text-blue-400 flex-shrink-0" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+            <p className="text-xs text-blue-400">Syncing data…</p>
+          </div>
+        )}
+        {status === 'done' && (
+          <p className="text-xs text-emerald-500">Data up to date</p>
+        )}
+        {status === 'error' && (
+          <p className="text-xs text-red-400">Sync error — check logs</p>
+        )}
         <p className="text-xs text-slate-600">AEMO · NEM · VIC1</p>
       </div>
     </aside>

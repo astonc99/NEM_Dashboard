@@ -14,6 +14,7 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import EmptyState from '../components/EmptyState'
 import BackfillPanel from '../components/BackfillPanel'
 import TimeRangeButtons, { activePeriodLabel, fmtAxisForPeriod } from '../components/TimeRangeButtons'
+import { useSyncStatus } from '../context/SyncContext'
 
 function fmtFull(ts) {
   return new Date(ts).toLocaleString('en-AU', {
@@ -49,6 +50,7 @@ function GenTooltip({ active, payload, label, fuelColors }) {
 }
 
 export default function GenerationMix() {
+  const { refreshKey, status: syncStatus } = useSyncStatus()
   const [meta, setMeta] = useState(null)
   const [genData, setGenData] = useState(null)
   const [topUnits, setTopUnits] = useState(null)
@@ -67,7 +69,7 @@ export default function GenerationMix() {
         setEndDate(m.max_date)
       }
     }).catch(() => {})
-  }, [])
+  }, [refreshKey])
 
   const fetchData = useCallback(() => {
     if (!startDate || !endDate) return
@@ -163,6 +165,8 @@ export default function GenerationMix() {
 
         {loading ? (
           <LoadingSpinner message="Loading generation data..." />
+        ) : !hasData && syncStatus === 'running' ? (
+          <LoadingSpinner message="Syncing SCADA data in background — this may take a few minutes…" />
         ) : !hasData ? (
           <EmptyState
             title="No generation data for this range"

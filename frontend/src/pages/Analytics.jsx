@@ -8,16 +8,21 @@ import { analytics as analyticsApi, generation as genApi, prices as pricesApi } 
 import LoadingSpinner from '../components/LoadingSpinner'
 import EmptyState from '../components/EmptyState'
 import TimeRangeButtons from '../components/TimeRangeButtons'
+import { useSyncStatus } from '../context/SyncContext'
 
 function fmtAxis(ts) {
   return new Date(ts).toLocaleDateString('en-AU', { day: '2-digit', month: 'short' })
 }
 
-function StatCard({ label, value, sub, color = 'text-slate-100' }) {
+function StatCard({ label, value, sub, color = 'text-slate-100', syncing = false }) {
   return (
     <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
       <p className="text-xs text-slate-500 uppercase tracking-wider mb-1.5 font-medium">{label}</p>
-      <p className={`text-2xl font-bold ${color}`}>{value ?? '—'}</p>
+      {syncing && value == null ? (
+        <div className="h-8 w-24 bg-slate-800 rounded animate-pulse mt-1 mb-1" />
+      ) : (
+        <p className={`text-2xl font-bold ${color}`}>{value ?? '—'}</p>
+      )}
       {sub && <p className="text-xs text-slate-600 mt-1">{sub}</p>}
     </div>
   )
@@ -67,6 +72,7 @@ function DurationTooltip({ active, payload }) {
 }
 
 export default function Analytics() {
+  const { refreshKey, status: syncStatus } = useSyncStatus()
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate]     = useState('')
   const [genMeta, setGenMeta]     = useState(null)
@@ -78,7 +84,6 @@ export default function Analytics() {
   const [durData, setDurData]   = useState(null)
   const [durLoading, setDurLoading] = useState(false)
 
-  // Load metadata to determine available date ranges
   useEffect(() => {
     Promise.all([genApi.getMeta(), pricesApi.getMeta()])
       .then(([gm, pm]) => {
@@ -96,7 +101,7 @@ export default function Analytics() {
         }
       })
       .catch(() => {})
-  }, [])
+  }, [refreshKey])
 
   const fetchRenewable = useCallback(() => {
     if (!startDate || !endDate) return
@@ -168,22 +173,26 @@ export default function Analytics() {
           value={renData?.avg_pct != null ? `${renData.avg_pct}%` : null}
           sub="Wind + Solar + Hydro + Bioenergy"
           color={renData?.avg_pct >= 50 ? 'text-emerald-400' : 'text-slate-100'}
+          syncing={syncStatus === 'running'}
         />
         <StatCard
           label="% Time Negative Price"
           value={durData?.pct_negative != null ? `${durData.pct_negative}%` : null}
           sub="Intervals with RRP < $0"
           color={durData?.pct_negative > 10 ? 'text-red-400' : 'text-slate-100'}
+          syncing={syncStatus === 'running'}
         />
         <StatCard
           label="Median Price"
           value={durData?.median_rrp != null ? `$${durData.median_rrp}` : null}
           sub="A$/MWh · 50th percentile"
+          syncing={syncStatus === 'running'}
         />
         <StatCard
           label="Total Intervals"
           value={durData?.total_intervals?.toLocaleString() ?? null}
           sub="5-minute dispatch intervals"
+          syncing={syncStatus === 'running'}
         />
       </div>
 

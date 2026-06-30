@@ -49,7 +49,7 @@ export default function Home() {
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         <Link
           to="/prices"
           className="group bg-slate-900 border border-slate-800 hover:border-blue-500/40 rounded-xl p-6 transition-all duration-200"
@@ -90,6 +90,21 @@ export default function Home() {
               <span className="text-xs text-slate-600">{genMeta.min_date} → {genMeta.max_date}</span>
             </div>
           )}
+        </Link>
+
+        <Link
+          to="/analytics"
+          className="group bg-slate-900 border border-slate-800 hover:border-emerald-500/40 rounded-xl p-6 transition-all duration-200"
+        >
+          <div className="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-4 group-hover:bg-emerald-500/20 transition-colors">
+            <svg className="w-4.5 h-4.5 text-emerald-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z" />
+            </svg>
+          </div>
+          <h2 className="text-base font-semibold text-slate-100 mb-1.5">Analytics</h2>
+          <p className="text-sm text-slate-500 leading-relaxed">
+            Renewable penetration curve and price duration analysis for the VIC1 region
+          </p>
         </Link>
       </div>
     </div>

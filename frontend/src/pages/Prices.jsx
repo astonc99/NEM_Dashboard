@@ -9,6 +9,7 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import EmptyState from '../components/EmptyState'
 import BackfillPanel from '../components/BackfillPanel'
 import TimeRangeButtons, { activePeriodLabel, fmtAxisForPeriod } from '../components/TimeRangeButtons'
+import { useSyncStatus } from '../context/SyncContext'
 
 function fmtFull(ts) {
   return new Date(ts).toLocaleString('en-AU', {
@@ -31,6 +32,7 @@ function PriceTooltip({ active, payload, label }) {
 }
 
 export default function Prices() {
+  const { refreshKey } = useSyncStatus()
   const [meta, setMeta]               = useState(null)
   const [summary, setSummary]         = useState(null)
   const [chartData, setChartData]     = useState(null)
@@ -49,7 +51,7 @@ export default function Prices() {
       }
     }).catch(() => {})
     pricesApi.getSummary().then(setSummary).catch(() => {})
-  }, [])
+  }, [refreshKey])
 
   const fetchChart = useCallback(() => {
     if (!startDate || !endDate) return
