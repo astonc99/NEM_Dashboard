@@ -10,11 +10,17 @@ venv/
 
 # Generated data — download via ETL, don't version-control
 data/raw/
-data/curated/prices/
-data/curated/scada/
+data/curated/prices/*.parquet
+data/curated/scada/*.parquet
 data/curated/*.parquet
 data/curated/*.csv
 !data/curated/.gitkeep
+
+# Sample dataset bundled for the demo deployment (Jan + Feb 2026)
+!data/curated/prices/prices_2026-01.parquet
+!data/curated/prices/prices_2026-02.parquet
+!data/curated/scada/scada_2026-01.parquet
+!data/curated/scada/scada_2026-02.parquet
 
 # Frontend build output and dependencies
 frontend/node_modules/
